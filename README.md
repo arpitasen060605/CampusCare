@@ -5,12 +5,10 @@
 
 ---
 ## Problem 
-
-   Campus complaints are often managed through fragmented channels such as emails, forms, messaging groups, or manual registers. This makes it difficult to prioritize emergencies, identify duplicate complaints, assign issues to the right department, track resolution progress, and measure staff performance.
+Campus complaints are often managed through fragmented channels such as emails, forms, messaging groups, or manual registers. This makes it difficult to prioritize emergencies, identify duplicate complaints, assign issues to the right department, track resolution progress, and measure staff performance.
 ---
 ## Solution
-
-   CampusCare centralizes the entire grievance lifecycle using AI-powered triage, duplicate detection, automated routing, real-time tracking, geolocation, and analytics.
+ CampusCare centralizes the entire grievance lifecycle using AI-powered triage, duplicate detection, automated routing, real-time tracking, geolocation, and analytics.
 ---
 ## 🌟 Executive Overview
 
