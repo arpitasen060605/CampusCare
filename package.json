@@ -1,4 +1,24 @@
 {
+<<<<<<< HEAD
+=======
+  "name": "smart-complaint-management",
+  "version": "1.0.0",
+  "description": "Smart Complaint Management System - Campus & College Complaint Platform",
+  "main": "server/server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+>>>>>>> ed63dd8575405e3d9ed7d6518e58ffb65ab2747c
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "tailwindcss": "^4.3.3"
