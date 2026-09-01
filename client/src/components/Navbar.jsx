@@ -50,9 +50,8 @@ const Navbar = ({ showToast }) => {
               </div>
             </div>
             <div>
-              <div className="font-black text-white text-base sm:text-lg tracking-tight flex items-center gap-1.5">
+              <div className="font-black text-white text-base sm:text-lg tracking-tight">
                 <span>Smart Complaint</span>
-                <span className="px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px] font-mono border border-indigo-500/30">AI</span>
               </div>
               <p className="text-[10px] text-slate-400 tracking-wider uppercase font-semibold hidden sm:block">Campus Grievance System</p>
             </div>
