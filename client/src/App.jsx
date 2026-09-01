@@ -11,6 +11,8 @@ import Toast from './components/Toast';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import StudentDashboard from './pages/StudentDashboard';
 import SubmitComplaint from './pages/SubmitComplaint';
 import MyComplaints from './pages/MyComplaints';
@@ -31,7 +33,7 @@ function AppContent() {
     setToast({ message, type });
   };
 
-  const isPublicPage = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register';
+  const isPublicPage = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname === '/reset-password';
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
@@ -61,6 +63,8 @@ function AppContent() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login showToast={showToast} />} />
             <Route path="/register" element={<Register showToast={showToast} />} />
+            <Route path="/forgot-password" element={<ForgotPassword showToast={showToast} />} />
+            <Route path="/reset-password" element={<ResetPassword showToast={showToast} />} />
 
             {/* Student Protected Routes */}
             <Route 

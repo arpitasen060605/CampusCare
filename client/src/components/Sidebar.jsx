@@ -9,7 +9,6 @@ import {
   MapPin, 
   UserCheck, 
   ShieldAlert, 
-  Sparkles,
   Settings,
   HelpCircle,
   ChevronRight
@@ -93,20 +92,10 @@ const Sidebar = ({ role = 'Student', isOpen = true, onClose }) => {
         </div>
       </div>
 
-      {/* Quick Action & Help Banner */}
-      <div className="p-4 space-y-4">
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-900/40 to-slate-900 border border-indigo-500/20 text-xs text-slate-300">
-          <div className="flex items-center gap-1.5 text-indigo-300 font-semibold mb-1">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span>AI Triage Active</span>
-          </div>
-          <p className="text-[11px] text-slate-400 leading-normal">
-            Gemini AI automatically tags urgency scores on every submission.
-          </p>
-        </div>
-
+      {/* Sidebar Footer */}
+      <div className="p-4">
         <div className="pt-2 border-t border-slate-900 text-[11px] text-slate-400 flex items-center justify-between px-1">
-          <span className="font-mono">v1.0 Hackathon</span>
+          <span className="font-mono">v1.0.0</span>
           <span>Campus Portal</span>
         </div>
       </div>

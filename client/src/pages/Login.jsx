@@ -1,27 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldAlert, Lock, Mail, Sparkles, ArrowRight, RefreshCw } from 'lucide-react';
+import { ShieldAlert, Lock, Mail, ArrowRight, RefreshCw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Login = ({ showToast }) => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [role, setRole] = useState('student');
-  const [email, setEmail] = useState('student1@college.edu');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-
-  const handlePreFill = (selectedRole) => {
-    setRole(selectedRole.toLowerCase());
-    if (selectedRole === 'student') {
-      setEmail('student1@college.edu');
-    } else if (selectedRole === 'staff') {
-      setEmail('facilities.staff@college.edu');
-    } else {
-      setEmail('admin@college.edu');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +52,7 @@ const Login = ({ showToast }) => {
             <button
               key={r}
               type="button"
-              onClick={() => handlePreFill(r.toLowerCase())}
+              onClick={() => setRole(r.toLowerCase())}
               className={`py-2 rounded-lg transition-all capitalize ${
                 role === r.toLowerCase() ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
               }`}
@@ -91,6 +80,7 @@ const Login = ({ showToast }) => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your campus email"
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all"
               />
             </div>
@@ -105,8 +95,14 @@ const Login = ({ showToast }) => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-all"
               />
+            </div>
+            <div className="flex justify-end mt-1.5">
+              <Link to="/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300 hover:underline transition-colors font-medium">
+                Forgot Password?
+              </Link>
             </div>
           </div>
 
@@ -128,15 +124,6 @@ const Login = ({ showToast }) => {
             )}
           </button>
         </form>
-
-        {/* Demo Quick fill hint */}
-        <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-400 space-y-1">
-          <div className="flex items-center gap-1.5 text-cyan-400 font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Hackathon Quick Demo Credentials</span>
-          </div>
-          <p>Clicking any role tab pre-fills credentials (Password: <strong>password123</strong>).</p>
-        </div>
 
         <div className="text-center text-xs text-slate-400">
           Don't have an account?{' '}

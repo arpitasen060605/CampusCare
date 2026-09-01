@@ -22,13 +22,6 @@ const LandingPage = () => {
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-6">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-blue-600/20 to-cyan-500/10 blur-[130px] rounded-full pointer-events-none" />
 
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-xs font-semibold text-indigo-300 border border-indigo-500/30 mb-8 animate-pulse-slow">
-          <Sparkles className="w-4 h-4 text-cyan-400" />
-          <span>Hackathon-Grade Campus Complaint AI</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span className="text-slate-400">Gemini Powered</span>
-        </div>
-
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15] max-w-5xl mx-auto">
           Report Problems. <br className="hidden sm:inline" />
           <span className="gradient-text">We Make Sure They're Solved.</span>

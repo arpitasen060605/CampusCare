@@ -41,7 +41,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Hackathon Status</h4>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">System Status</h4>
             <div className="glass-card p-4 rounded-xl space-y-2 border border-indigo-500/20">
               <div className="flex items-center justify-between text-xs text-slate-300">
                 <span>Core Setup</span>
@@ -60,7 +60,7 @@ const Footer = () => {
         </div>
 
         <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© 2026 Smart Complaint Management System. Built for College Hackathon.</p>
+          <p>© 2026 Smart Complaint Management System. All rights reserved.</p>
           <div className="flex items-center gap-1">
             <span>Powered by Node.js & React</span>
           </div>

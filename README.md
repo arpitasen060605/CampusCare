@@ -1,6 +1,6 @@
 # 🎓 CampusCare - Smart Complaint Management System
 
-> **AI-Powered, Hackathon-Ready Campus Grievance Resolution Platform**  
+> **AI-Powered, Enterprise-Ready Campus Grievance Resolution Platform**  
 > *"Report Problems. We Make Sure They're Solved."*
 
 ---
@@ -189,9 +189,9 @@ npm run dev
 
 ---
 
-## ⏱️ 3-Minute Hackathon Demo Script
+## ⏱️ 3-Minute Product Walkthrough Script
 
-Follow this step-by-step walkthrough during judge presentations:
+Follow this step-by-step walkthrough to test all system capabilities:
 
 1. **Student Complaint Filing (0:00 - 0:45)**
    - Sign in as `student1@college.edu` / `password123`.
