@@ -120,10 +120,15 @@ const Register = ({ showToast }) => {
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
               >
                 <option value="Computer Science">Computer Science</option>
-                <option value="Electrical Engineering">Electrical Engineering</option>
-                <option value="Mechanical Engineering">Mechanical Engineering</option>
-                <option value="Facilities & Maintenance">Facilities & Maintenance</option>
-                <option value="IT & Network Services">IT & Network Services</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Sanitation">Sanitation</option>
+                <option value="Security">Security</option>
+                <option value="IT">IT</option>
+                <option value="Administration">Administration</option>
+                <option value="Hostel">Hostel</option>
+                <option value="Transport">Transport</option>
+                <option value="Academic">Academic</option>
               </select>
             </div>
           </div>

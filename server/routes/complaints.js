@@ -53,17 +53,63 @@ router.post('/', protect, upload.single('photo'), async (req, res, next) => {
       aiAnalyzed: true,
       duplicateOf: duplicateOf || null,
       duplicateSimilarity: duplicateSimilarity ? parseFloat(duplicateSimilarity) : 0,
+      history: [
+        {
+          oldStatus: '',
+          newStatus: 'Pending',
+          changedBy: req.user.id,
+          message: 'Complaint submitted by student',
+          createdAt: new Date(),
+        },
+      ],
     });
 
     const populatedComplaint = await Complaint.findById(complaint._id)
       .populate('submittedBy', 'name email department role')
-      .populate('duplicateOf', 'complaintId title status');
+      .populate('duplicateOf', 'complaintId title status')
+      .populate('history.changedBy', 'name email role');
 
     res.status(201).json({
       success: true,
       message: 'Complaint created and AI-analyzed successfully',
       complaint: populatedComplaint,
       aiAnalysis: aiResult,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   GET /api/complaints/staff/stats
+// @desc    Get staff dashboard counts (Assigned, In Progress, Resolved)
+// @access  Private (Staff or Admin)
+router.get('/staff/stats', protect, authorize('staff', 'admin'), async (req, res, next) => {
+  try {
+    const staffId = req.user.id;
+    const assignedCount = await Complaint.countDocuments({
+      assignedTo: staffId,
+      status: { $in: ['Assigned', 'In Progress'] },
+    });
+    const inProgressCount = await Complaint.countDocuments({
+      assignedTo: staffId,
+      status: 'In Progress',
+    });
+    const resolvedCount = await Complaint.countDocuments({
+      assignedTo: staffId,
+      status: 'Resolved',
+    });
+    const totalCount = await Complaint.countDocuments({
+      assignedTo: staffId,
+    });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        assigned: assignedCount,
+        inProgress: inProgressCount,
+        resolved: resolvedCount,
+        total: totalCount,
+      },
     });
   } catch (error) {
     next(error);
@@ -133,17 +179,33 @@ router.get('/:id', protect, async (req, res, next) => {
         .populate('submittedBy', 'name email department role')
         .populate('assignedTo', 'name email department role')
         .populate('resolvedBy', 'name email department role')
-        .populate('duplicateOf', 'complaintId title status description category location');
+        .populate('duplicateOf', 'complaintId title status description category location')
+        .populate('history.changedBy', 'name email role');
     } else {
       complaint = await Complaint.findOne({ complaintId: req.params.id })
         .populate('submittedBy', 'name email department role')
         .populate('assignedTo', 'name email department role')
         .populate('resolvedBy', 'name email department role')
-        .populate('duplicateOf', 'complaintId title status description category location');
+        .populate('duplicateOf', 'complaintId title status description category location')
+        .populate('history.changedBy', 'name email role');
     }
 
     if (!complaint) {
       return res.status(404).json({ error: 'Not Found', message: 'Complaint not found' });
+    }
+
+    // Role-based authorization scoping
+    if (req.user.role === 'student') {
+      const submitterId = complaint.submittedBy?._id ? complaint.submittedBy._id.toString() : complaint.submittedBy?.toString();
+      if (submitterId !== req.user.id.toString()) {
+        return res.status(403).json({ error: 'Forbidden', message: 'Not authorized to view complaints submitted by another user' });
+      }
+    } else if (req.user.role === 'staff') {
+      const assignedId = complaint.assignedTo?._id ? complaint.assignedTo._id.toString() : complaint.assignedTo?.toString();
+      const resolverId = complaint.resolvedBy?._id ? complaint.resolvedBy._id.toString() : complaint.resolvedBy?.toString();
+      if (assignedId !== req.user.id.toString() && resolverId !== req.user.id.toString()) {
+        return res.status(403).json({ error: 'Forbidden', message: 'Not authorized to view complaints assigned to another staff member' });
+      }
     }
 
     res.status(200).json({
@@ -177,7 +239,8 @@ router.put('/:id', protect, async (req, res, next) => {
       .populate('submittedBy', 'name email department role')
       .populate('assignedTo', 'name email department role')
       .populate('resolvedBy', 'name email department role')
-      .populate('duplicateOf', 'complaintId title status');
+      .populate('duplicateOf', 'complaintId title status')
+      .populate('history.changedBy', 'name email role');
 
     res.status(200).json({
       success: true,
@@ -236,14 +299,26 @@ router.put('/:id/assign', protect, authorize('admin', 'staff'), async (req, res,
       return res.status(404).json({ error: 'Not Found', message: 'Complaint not found' });
     }
 
+    const oldStatus = complaint.status;
     complaint.assignedTo = staffId;
     complaint.status = 'Assigned';
     complaint.assignedAt = new Date();
+
+    if (!complaint.history) complaint.history = [];
+    complaint.history.push({
+      oldStatus,
+      newStatus: 'Assigned',
+      changedBy: req.user.id,
+      message: `Complaint assigned to staff member ${staffUser.name}`,
+      createdAt: new Date(),
+    });
+
     await complaint.save();
 
     const updatedComplaint = await Complaint.findById(complaint._id)
       .populate('submittedBy', 'name email department role')
-      .populate('assignedTo', 'name email department role');
+      .populate('assignedTo', 'name email department role')
+      .populate('history.changedBy', 'name email role');
 
     res.status(200).json({
       success: true,
@@ -271,6 +346,12 @@ router.put('/:id/status', protect, authorize('admin', 'staff'), async (req, res,
       return res.status(404).json({ error: 'Not Found', message: 'Complaint not found' });
     }
 
+    // Security check: staff can only update complaints assigned to them
+    if (req.user.role === 'staff' && complaint.assignedTo?.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ error: 'Forbidden', message: 'Not authorized to update status for a complaint assigned to another staff member' });
+    }
+
+    const oldStatus = complaint.status;
     complaint.status = status;
     if (status === 'In Progress' && !complaint.startedAt) {
       complaint.startedAt = new Date();
@@ -280,12 +361,22 @@ router.put('/:id/status', protect, authorize('admin', 'staff'), async (req, res,
       if (!complaint.resolvedBy) complaint.resolvedBy = req.user.id;
     }
 
+    if (!complaint.history) complaint.history = [];
+    complaint.history.push({
+      oldStatus,
+      newStatus: status,
+      changedBy: req.user.id,
+      message: `Status updated to ${status}`,
+      createdAt: new Date(),
+    });
+
     await complaint.save();
 
     const updatedComplaint = await Complaint.findById(complaint._id)
       .populate('submittedBy', 'name email department role')
       .populate('assignedTo', 'name email department role')
-      .populate('resolvedBy', 'name email department role');
+      .populate('resolvedBy', 'name email department role')
+      .populate('history.changedBy', 'name email role');
 
     res.status(200).json({
       success: true,
@@ -314,6 +405,12 @@ router.post('/:id/resolve', protect, authorize('admin', 'staff'), upload.single(
       return res.status(404).json({ error: 'Not Found', message: 'Complaint not found' });
     }
 
+    // Security check: staff can only resolve complaints assigned to them
+    if (req.user.role === 'staff' && complaint.assignedTo?.toString() !== req.user.id.toString()) {
+      return res.status(403).json({ error: 'Forbidden', message: 'Not authorized to resolve a complaint assigned to another staff member' });
+    }
+
+    const oldStatus = complaint.status;
     const resolutionPhotoPath = req.file ? `/uploads/${req.file.filename}` : (req.body.resolutionPhoto || '');
 
     complaint.status = 'Resolved';
@@ -324,12 +421,22 @@ router.post('/:id/resolve', protect, authorize('admin', 'staff'), upload.single(
     complaint.resolvedAt = new Date();
     complaint.resolvedBy = req.user.id;
 
+    if (!complaint.history) complaint.history = [];
+    complaint.history.push({
+      oldStatus,
+      newStatus: 'Resolved',
+      changedBy: req.user.id,
+      message: `Complaint resolved: ${resolutionNote.trim()}`,
+      createdAt: new Date(),
+    });
+
     await complaint.save();
 
     const updatedComplaint = await Complaint.findById(complaint._id)
       .populate('submittedBy', 'name email department role')
       .populate('assignedTo', 'name email department role')
-      .populate('resolvedBy', 'name email department role');
+      .populate('resolvedBy', 'name email department role')
+      .populate('history.changedBy', 'name email role');
 
     res.status(200).json({
       success: true,

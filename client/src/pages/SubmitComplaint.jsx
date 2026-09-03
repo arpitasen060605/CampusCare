@@ -13,7 +13,6 @@ import {
   Check
 } from 'lucide-react';
 import { complaintsAPI, aiAPI } from '../services/api';
-import { mockCampusLocations } from '../mock/mockData';
 import AIAnalysisCard from '../components/AIAnalysisCard';
 import { AILoadingAnimation } from '../components/AIBadge';
 import DuplicateWarningModal from '../components/DuplicateWarningModal';

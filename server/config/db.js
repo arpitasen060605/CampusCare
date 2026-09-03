@@ -4,7 +4,7 @@ let mongod = null;
 
 const connectDB = async () => {
   try {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/smart_complaint_db';
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/smart_complaint_db';
     
     // Attempt standard MongoDB connection first
     const conn = await mongoose.connect(mongoUri, {

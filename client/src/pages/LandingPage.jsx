@@ -9,7 +9,6 @@ import {
   Clock, 
   BarChart3, 
   ArrowRight, 
-  Sparkles, 
   CheckCircle2,
   Users,
   Zap

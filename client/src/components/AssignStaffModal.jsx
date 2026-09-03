@@ -100,11 +100,15 @@ const AssignStaffModal = ({
             className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
           >
             <option value="All">All Departments</option>
-            <option value="Facilities & Maintenance">Facilities & Maintenance</option>
-            <option value="IT & Network Services">IT & Network Services</option>
-            <option value="HVAC & Electrical">HVAC & Electrical</option>
-            <option value="Mess & Sanitation">Mess & Sanitation</option>
-            <option value="Furniture & Carpentry">Furniture & Carpentry</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Sanitation">Sanitation</option>
+            <option value="Security">Security</option>
+            <option value="IT">IT</option>
+            <option value="Administration">Administration</option>
+            <option value="Hostel">Hostel</option>
+            <option value="Transport">Transport</option>
+            <option value="Academic">Academic</option>
           </select>
         </div>
 

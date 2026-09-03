@@ -90,6 +90,21 @@ router.get('/dashboard', protect, async (req, res, next) => {
           },
           inProgress: {
             $sum: { $cond: [{ $in: ['$status', ['Assigned', 'In Progress']] }, 1, 0] }
+          },
+          totalResolutionMs: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ['$status', 'Resolved'] },
+                    { $ifNull: ['$resolvedAt', false] },
+                    { $ifNull: ['$createdAt', false] }
+                  ]
+                },
+                { $subtract: ['$resolvedAt', '$createdAt'] },
+                0
+              ]
+            }
           }
         }
       }
@@ -101,13 +116,18 @@ router.get('/dashboard', protect, async (req, res, next) => {
     });
 
     const departmentPerformance = departmentsList.map(dept => {
-      const data = deptMap[dept] || { total: 0, resolved: 0, pending: 0 };
+      const data = deptMap[dept] || { total: 0, resolved: 0, pending: 0, totalResolutionMs: 0 };
+      let avgTimeStr = 'N/A';
+      if (data.resolved > 0 && data.totalResolutionMs > 0) {
+        const avgHours = (data.totalResolutionMs / (1000 * 60 * 60 * data.resolved)).toFixed(1);
+        avgTimeStr = `${avgHours} hrs`;
+      }
       return {
         department: dept,
         total: data.total,
         resolved: data.resolved,
         pending: data.pending,
-        avgResolutionTime: data.resolved > 0 ? `${(2.5 + Math.random() * 2).toFixed(1)} hrs` : 'N/A',
+        avgResolutionTime: avgTimeStr,
       };
     });
 

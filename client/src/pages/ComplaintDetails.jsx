@@ -102,11 +102,19 @@ const ComplaintDetails = ({ showToast }) => {
               keywords: c.aiKeywords && c.aiKeywords.length > 0 ? c.aiKeywords : ['campus', c.category?.toLowerCase() || 'facility'],
               priorityReason: c.priorityReason || `Assigned ${c.priority || 'High'} priority based on impact context.`,
             },
+            history: c.history || [],
             attachments: c.photo ? [{ name: 'submitted-evidence.jpg', size: '1.2 MB', url: c.photo }] : [],
           });
 
-          if (c.resolutionNote) {
-            setComments([{ author: resolvedByPerson, text: c.resolutionNote, date: c.resolvedAt || c.updatedAt }]);
+          if (c.history && c.history.length > 0) {
+            const historyComments = c.history.map(h => ({
+              author: h.changedBy?.name || 'System / Workflow',
+              text: h.message || `Status updated to ${h.newStatus}`,
+              date: h.createdAt,
+            }));
+            setComments(historyComments);
+          } else if (c.resolutionNote) {
+            setComments([{ author: resolvedByPerson, text: `Resolution: ${c.resolutionNote}`, date: c.resolvedAt || c.updatedAt }]);
           }
         }
       } catch (err) {

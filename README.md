@@ -1,20 +1,13 @@
-# 🎓 CampusCare - Smart Complaint Management System
+# 🎓 Smart Complaint Management System
 
-> **AI-Powered, Enterprise-Ready Campus Grievance Resolution Platform**  
+> **Production-Grade, Enterprise-Ready AI Campus Grievance Resolution Platform**  
 > *"Report Problems. We Make Sure They're Solved."*
 
 ---
-## Problem
-
-Campus complaints are often managed through fragmented channels such as emails, forms, messaging groups, or manual registers. This makes it difficult to prioritize emergencies, identify duplicate complaints, assign issues to the right department, track resolution progress, and measure staff performance.
-
-## Solution
-
-CampusCare centralizes the entire grievance lifecycle using AI-powered triage, duplicate detection, automated routing, real-time tracking, geolocation, and analytics.
 
 ## 🌟 Executive Overview
 
-**CampusCare** is a full-stack, AI-powered campus grievance platform designed for universities and educational institutions. Powered by **Google Gemini AI** and **Cosine Similarity duplicate detection algorithms**, the platform automates ticket triage, emergency priority detection, department routing, staff workload dispatching, SLA resolution tracking, and real-time spatial campus mapping.
+The **Smart Complaint Management System** is a full-stack, enterprise-grade campus grievance platform designed for universities and educational institutions. Powered by **Google Gemini AI** and **Cosine Similarity duplicate detection algorithms**, the platform automates ticket triage, emergency priority detection, department routing, staff workload dispatching, SLA resolution tracking, and real-time spatial campus mapping.
 
 ---
 
@@ -152,7 +145,7 @@ Create `.env` file in root or server directory:
 ```env
 PORT=5000
 MONGODB_URI=mongodb://127.0.0.1:27017/smart_complaint_db
-JWT_SECRET=JWT_SECRET_HERE 
+JWT_SECRET=super_secret_jwt_hackathon_key_2026
 GEMINI_API_KEY=your_gemini_api_key_here
 NODE_ENV=development
 ```

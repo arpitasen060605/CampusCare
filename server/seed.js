@@ -12,10 +12,19 @@ const seedDatabase = async () => {
   try {
     console.log('=== STARTING HACKATHON DATABASE SEEDER ===\n');
 
-    // Connect to MongoDB
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/smart_complaint_db';
-    await mongoose.connect(mongoUri);
-    console.log('--> Connected to MongoDB:', mongoose.connection.name);
+    // Connect to MongoDB (with In-Memory fallback for local testing)
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/smart_complaint_db';
+    try {
+      await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 2000 });
+      console.log('--> Connected to MongoDB:', mongoose.connection.host);
+    } catch (err) {
+      console.warn(`[Seeder Warning] Local MongoDB service connection failed (${err.message}).`);
+      console.log('[Seeder] Starting In-Memory MongoDB Server for seeding...');
+      const { MongoMemoryServer } = require('mongodb-memory-server');
+      const mongod = await MongoMemoryServer.create();
+      await mongoose.connect(mongod.getUri());
+      console.log('--> Connected to In-Memory MongoDB successfully.');
+    }
 
     // Clear existing collections
     await User.deleteMany({});
@@ -218,6 +227,43 @@ const seedDatabase = async () => {
         duplicateSimilarity = 0.91;
       }
 
+      const history = [
+        {
+          oldStatus: '',
+          newStatus: 'Pending',
+          changedBy: student._id,
+          message: 'Complaint submitted by student',
+          createdAt: createdAt,
+        },
+      ];
+      if (assignedAt) {
+        history.push({
+          oldStatus: 'Pending',
+          newStatus: 'Assigned',
+          changedBy: adminUser._id,
+          message: `Complaint assigned to staff member ${staff.name}`,
+          createdAt: assignedAt,
+        });
+      }
+      if (startedAt) {
+        history.push({
+          oldStatus: 'Assigned',
+          newStatus: 'In Progress',
+          changedBy: staff._id,
+          message: `Staff member ${staff.name} started work on ticket`,
+          createdAt: startedAt,
+        });
+      }
+      if (resolvedAt) {
+        history.push({
+          oldStatus: 'In Progress',
+          newStatus: 'Resolved',
+          changedBy: staff._id,
+          message: `Complaint resolved: ${resolutionNote}`,
+          createdAt: resolvedAt,
+        });
+      }
+
       const createdDoc = await Complaint.create({
         complaintId,
         title: c.title,
@@ -243,6 +289,7 @@ const seedDatabase = async () => {
         assignedAt: assignedAt,
         startedAt: startedAt,
         resolvedAt: resolvedAt,
+        history: history,
       });
 
       if (i === 0) firstTicketId = createdDoc._id;

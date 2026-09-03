@@ -178,11 +178,11 @@ const validateAIResponse = (data, inputContext) => {
 
 // Main AI Analyzer Function
 const analyzeComplaint = async ({ title = '', description = '', location = '' }) => {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.AI_API_KEY || process.env.GEMINI_API_KEY;
 
-  // If GEMINI_API_KEY is not configured or dummy, use deterministic fallback
-  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
-    console.log('[AI Service] GEMINI_API_KEY not set. Executing deterministic keyword fallback classifier...');
+  // If AI_API_KEY is not configured or dummy, use deterministic fallback
+  if (!apiKey || apiKey === 'your_gemini_api_key_here' || apiKey === 'your_ai_api_key_here') {
+    console.log('[AI Service] AI_API_KEY / GEMINI_API_KEY not set. Executing deterministic keyword fallback classifier...');
     const rawFallback = fallbackClassifier({ title, description, location });
     return validateAIResponse(rawFallback, { title, description, location });
   }

@@ -78,7 +78,7 @@ const StaffDashboard = ({ showToast }) => {
     setIsResolveModalOpen(true);
   };
 
-  const assignedToMeCount = complaints.length;
+  const assignedToMeCount = complaints.filter(c => c.status === 'Assigned' || c.status === 'In Progress').length;
   const inProgressCount = complaints.filter(c => c.status === 'In Progress').length;
   const resolvedCount = complaints.filter(c => c.status === 'Resolved').length;
 
@@ -112,7 +112,7 @@ const StaffDashboard = ({ showToast }) => {
           value={assignedToMeCount}
           icon={CheckSquare}
           color="indigo"
-          subtitle="Total assigned to you"
+          subtitle="Active assigned tickets"
         />
         <DashboardCard
           title="In Progress"
@@ -223,7 +223,7 @@ const StaffDashboard = ({ showToast }) => {
                             <ExternalLink className="w-3 h-3" />
                           </Link>
 
-                          {/* Start Work */}
+                          {/* Start Work (If status === 'Assigned') */}
                           {c.status === 'Assigned' && (
                             <button
                               type="button"
@@ -235,8 +235,8 @@ const StaffDashboard = ({ showToast }) => {
                             </button>
                           )}
 
-                          {/* Resolve */}
-                          {c.status !== 'Resolved' && (
+                          {/* Resolve (If status === 'In Progress') */}
+                          {c.status === 'In Progress' && (
                             <button
                               type="button"
                               onClick={() => handleOpenResolve(c)}
@@ -245,6 +245,21 @@ const StaffDashboard = ({ showToast }) => {
                               <Check className="w-3.5 h-3.5" />
                               <span>Resolve</span>
                             </button>
+                          )}
+
+                          {/* Completed (If status === 'Resolved') */}
+                          {c.status === 'Resolved' && (
+                            <span className="px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold inline-flex items-center gap-1">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                              <span>Completed</span>
+                            </span>
+                          )}
+
+                          {/* Pending (If status === 'Pending') */}
+                          {c.status === 'Pending' && (
+                            <span className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 text-[11px] font-medium">
+                              Pending
+                            </span>
                           )}
                         </div>
                       </td>

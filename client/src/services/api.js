@@ -60,6 +60,7 @@ export const complaintsAPI = {
     });
   },
   getAll: (params) => api.get('/complaints', { params }),
+  getStaffStats: () => api.get('/complaints/staff/stats'),
   getById: (id) => api.get(`/complaints/${id}`),
   update: (id, data) => api.put(`/complaints/${id}`, data),
   delete: (id) => api.delete(`/complaints/${id}`),
