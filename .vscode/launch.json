@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Campus Testapp",
+      "type": "msedge",
+      "request": "launch",
+      "url": "https://api.rocketride.ai:443/?appid=local.campusTestapp&rrdev=1",
+      "webRoot": "${workspaceFolder}/apps/campusTestapp-ui",
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceFolder}/apps/campusTestapp-ui/*",
+        "webpack:///*": "*"
+      }
+    }
+  ]
+}
