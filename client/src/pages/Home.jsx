@@ -39,7 +39,6 @@ const Home = ({ healthData, healthLoading, healthError, refetchHealth }) => {
           <Zap className="w-4 h-4 text-cyan-400" />
           <span>Next-Gen Campus Grievance Portal</span>
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span className="text-slate-400">Powered by Gemini AI</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15] max-w-5xl mx-auto">
